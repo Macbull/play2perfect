@@ -108,6 +108,28 @@ python isaacsimenvs/train.py \
   --headless
 ```
 
+## Genesis simulator backend (open-source alternative)
+
+A fully open-source training backend built on the
+[Genesis](https://github.com/Genesis-Embodied-AI/Genesis) simulator is
+available under `genesisenvs/`.  It re-implements the same two-stage pipeline
+without requiring an Isaac Sim licence, using **rsl-rl-lib** as the RL library
+(following the [pilla_rl](https://github.com/code-name-57/pilla_rl) reference).
+
+See [docs/genesis_installation.md](docs/genesis_installation.md) for setup
+and usage.
+
+```bash
+# Stage 1 – play pre-training
+python genesisenvs/train_play.py --num_envs 4096
+
+# Stage 2 – precise-assembly fine-tune
+python genesisenvs/train_assembly.py \
+    --problem tight_insertion \
+    --checkpoint logs/play/model.pt \
+    --num_envs 1024
+```
+
 ## Deployment
 
 See [docs/deployment.md](docs/deployment.md) for the minimal sim-to-real reference.
@@ -128,6 +150,10 @@ This codebase builds on excellent prior work:
   large-scale PPO variant we use for training.
 - [**SimToolReal**](https://github.com/tylerlum/simtoolreal) — our prior work on
   object-centric tool manipulation, which the Stage-1 "play" pretraining is based on.
+- [**Genesis**](https://github.com/Genesis-Embodied-AI/Genesis) — open-source physics
+  simulator used by the `genesisenvs/` backend.
+- [**pilla_rl**](https://github.com/code-name-57/pilla_rl) — reference implementation
+  showing how to use Genesis with rsl-rl for robotic RL tasks.
 
 ## Citation
 

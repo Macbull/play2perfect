@@ -1,0 +1,21 @@
+# Play2Perfect – Genesis simulator backend dependencies
+#
+# Install with:
+#   pip install -r requirements_genesis.txt
+#
+# IMPORTANT: genesis-world requires Python ≥ 3.10 and a CUDA-capable GPU.
+# See docs/genesis_installation.md for the complete setup walkthrough.
+
+# ── Simulator ────────────────────────────────────────────────────────────────
+genesis-world @ git+https://github.com/Genesis-Embodied-AI/Genesis.git
+
+# ── RL library (must match pilla_rl reference: rsl-rl-lib == 2.3.3) ─────────
+rsl-rl-lib==2.3.3
+
+# ── Deep learning ────────────────────────────────────────────────────────────
+torch>=2.2.0
+torchvision
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+tensorboard>=2.15.0
+numpy>=1.24.0
