@@ -32,25 +32,28 @@ from importlib import metadata
 from pathlib import Path
 
 # Validate rsl-rl version before any heavy imports.
+# Fail fast if the conflicting 'rsl-rl' package is installed.
 try:
-    try:
-        if metadata.version("rsl-rl"):
-            raise ImportError
-    except metadata.PackageNotFoundError:
-        if metadata.version("rsl-rl-lib") != "2.3.3":
-            raise ImportError
-except (metadata.PackageNotFoundError, ImportError) as exc:
+    metadata.version("rsl-rl")
     raise ImportError(
-        "Please uninstall 'rsl_rl' and install 'rsl-rl-lib==2.3.3'."
-    ) from exc
+        "Conflicting package 'rsl-rl' is installed. "
+        "Please uninstall it and install 'rsl-rl-lib==2.3.3' instead."
+    )
+except metadata.PackageNotFoundError:
+    pass  # Good — the old package is absent.
+
+try:
+    _ver = metadata.version("rsl-rl-lib")
+except metadata.PackageNotFoundError as exc:
+    raise ImportError("Please install 'rsl-rl-lib==2.3.3' (pip install rsl-rl-lib==2.3.3).") from exc
+
+if _ver != "2.3.3":
+    raise ImportError(f"rsl-rl-lib {_ver} found; Play2Perfect requires exactly 2.3.3.")
 
 from rsl_rl.runners import OnPolicyRunner
 
 import genesis as gs
 
-# Play2Perfect genesis environment.
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from genesisenvs.tasks.play.play_env import GenesisPlayEnv
 
 

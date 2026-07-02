@@ -51,7 +51,7 @@ from genesisenvs.tasks.play.math_utils import (
 # Repository root — used to resolve URDF paths at init time.
 # ---------------------------------------------------------------------------
 
-_REPO_ROOT = Path(__file__).resolve().parents[4]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 
 # ---------------------------------------------------------------------------
 # Robot joint layout (29 DOF: 7 arm + 22 hand)
@@ -307,7 +307,7 @@ class GenesisPlayEnv:
                 camera_lookat=(0.0, 0.0, 0.6),
                 camera_fov=45,
             ),
-            vis_options=gs.options.VisOptions(rendered_envs_idx=list(range(min(1, self.num_envs)))),
+            vis_options=gs.options.VisOptions(rendered_envs_idx=[0]),
             rigid_options=gs.options.RigidOptions(
                 dt=physics_dt,
                 constraint_solver=gs.constraint_solver.Newton,

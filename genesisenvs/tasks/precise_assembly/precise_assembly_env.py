@@ -35,6 +35,7 @@ import genesis as gs
 
 from genesisenvs.tasks.play.math_utils import (
     keypoints_world,
+    quat_apply,
     quat_from_angle_axis,
     quat_mul,
     random_orientation,
@@ -45,7 +46,7 @@ from genesisenvs.tasks.play.play_env import GenesisPlayEnv
 # Per-problem asset and goal configuration
 # ---------------------------------------------------------------------------
 
-_REPO_ROOT = Path(__file__).resolve().parents[4]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 
 PROBLEM_CONFIGS: dict[str, dict] = {
     "tight_insertion": {
@@ -264,12 +265,10 @@ class GenesisPreciseAssemblyEnv(GenesisPlayEnv):
             is_final * ins_quat.unsqueeze(0)
             + (1.0 - is_final) * pre_quat.unsqueeze(0)
         )
-        # Translate goal into the fixture's local frame.
-        from genesisenvs.tasks.play.math_utils import quat_apply
+        # Translate goal into the fixture's local frame to obtain world coords.
         goal_pos_world = self._fixture_pos[env_ids] + quat_apply(
             self._fixture_quat[env_ids],
-            goal_pos - torch.tensor(pcfg["insert_pos"], device=dev).unsqueeze(0)
-            + torch.tensor(pcfg["insert_pos"], device=dev).unsqueeze(0),
+            goal_pos,
         )
         self._goal_pos[env_ids] = goal_pos_world
         self._goal_quat[env_ids] = goal_quat
